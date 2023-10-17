@@ -14,6 +14,11 @@ export default class Map extends Component {
         this.dom = createRef();
         let { latitude = 35.699739, longitude = 51.338097,zoom = 14 } = props;
         this.state = { address:'',latitude, longitude,prevLatitude:latitude,prevLongitude:longitude,zoom,prevZoom:zoom }
+        if(props.getActions){
+            props.getActions({
+                flyTo:this.flyTo.bind(this)
+            })
+        }
     }
     handleArea(){
         let {area} = this.props;
@@ -51,7 +56,7 @@ export default class Map extends Component {
     async getAddress(latitude, longitude){
         let { apiKeys = {}} = this.props;
         try{
-            let param = {headers:{'Api-Key':apiKeys.service,Authorization:false}}
+            let param = {headers:{'Api-Key':apiKeys.service}}
             let url = `https://api.neshan.org/v5/reverse?lat=${latitude}&lng=${longitude}`;
             let res = await Axios.get(url,param);
             let address;
@@ -104,8 +109,11 @@ export default class Map extends Component {
     }
     move(lat, lng,caller){
         console.log('move',caller)
-        let {onChange = ()=>{}} = this.props;
-        this.marker.setLatLng({ lat, lng })
+        let {onChange = ()=>{},showMarker} = this.props;
+        if(showMarker !== false){
+            this.marker.setLatLng({ lat, lng })
+        
+        }
         clearTimeout(this.timeout);
 
         this.timeout = setTimeout(async () => {
@@ -119,7 +127,7 @@ export default class Map extends Component {
     
     init(){
         console.log('init')
-        let {zoom = 12, onClick, apiKeys,onChange,onSubmit,popup} = this.props;
+        let {zoom = 12, onClick, apiKeys,onChange,onSubmit,popup,onZoom,showMarker} = this.props;
         let { latitude, longitude } = this.state;
         let changeView = (!!onSubmit || !!onChange) && !popup;
         let config = {
@@ -132,8 +140,8 @@ export default class Map extends Component {
             zoom: 14,
             dragging: !popup,
             scrollWheelZoom: 'center',
-            minZoom: changeView === false ? zoom : undefined,
-            maxZoom: changeView === false ? zoom : undefined,
+            minZoom: !onZoom ? zoom : undefined,
+            maxZoom: !onZoom ? zoom : undefined,
             // zoomControl: changeView !== false
         }
         let map = new window.L.Map(this.dom.current, config);
@@ -141,9 +149,11 @@ export default class Map extends Component {
         let myMap = map;
         this.map = myMap;
         this.L = L;
-        this.marker = L.marker([latitude, longitude])
+        if(showMarker !== false){
+            this.marker = L.marker([latitude, longitude])
             .addTo(myMap)
             .bindPopup('I am a popup.');
+        }
         if(popup){
             myMap.on('click', (e) => this.setState({showPopup:true}));
         }
