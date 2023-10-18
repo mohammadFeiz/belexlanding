@@ -33,12 +33,12 @@
 button{
   font-family:inherit;
 }
-body{
+#root{
   font-family:IranSans-light;
   text-align: center;
   display: flex;
   justify-content: center;
-  width:100%;
+  width:100vw;
   background-image:url(./images//burux.png);
   background-size: 80px;
   overflow:hidden;
@@ -52,6 +52,7 @@ body{
   width:100%;
   height:100vh;
   overflow-y: auto;
+  overflow-x:hidden;
   max-width:480px;
   box-shadow: 4px 4px 20px 1px rgb(0 0 0 / 83%);
 }
@@ -66,7 +67,7 @@ body{
   border:none;
   height:48px;
   width:100%;
-  font-size:18px;
+  font-size:16px;
 }
 .button-2{
   background:#0095DA;
@@ -75,7 +76,7 @@ body{
   border:none;
   height:48px;
   width:100%;
-  font-size:18px;
+  font-size:16px;
 }
 .c747474{
   color:#747474;
