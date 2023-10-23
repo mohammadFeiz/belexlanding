@@ -57,9 +57,7 @@ button{
   box-shadow: 4px 4px 20px 1px rgb(0 0 0 / 83%);
 }
 .buttons{
-  position:absolute;
-  bottom:72px;;
-  width: 100%;
+  background:#fff;
 }
 .button-1{
   background:none;
@@ -71,33 +69,49 @@ button{
 }
 .button-2{
   background:#0095DA;
+  border:1px solid #0095DA; 
   color:#fff;
   border-radius:12px;
   border:none;
   height:48px;
   width:100%;
   font-size:16px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.button-5{
+  background:#fff;
+  border:1px solid; 
+  border-radius:12px;
+  color:#0095DA;
+  height:48px;
+  width:100%;
+  font-size:16px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
 .c747474{
   color:#747474;
 }
 .day-box{
   width:48px;
-  color:#932551;
+  color:#2F8BB5;
   font-weight:bold;
   height:48px;
   display:flex;
   align-items: center;
   justify-content: center;
-  box-shadow:2px 5px 6px 1px #932551;
+  box-shadow:2px 5px 6px 1px #2F8BB5;
 }
 .date-box{
   height:24px;
   width:288px;
-  color:#932551;
+  color:#2F8BB5;
   font-size:18px;
   font-weight:bold;
-  box-shadow:2px 5px 6px 1px #932551;
+  box-shadow:2px 5px 6px 1px #2F8BB5;
 }
 .zereshki{
   color:#932551;
@@ -110,13 +124,19 @@ button{
   background-size: cover;
 }
 .dash-box1{
-  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='white' stroke-width='2' stroke-dasharray='24%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+  background-color: #5670A066;
+background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='20' ry='20' stroke='%23F7F7F7FF' stroke-width='2' stroke-dasharray='24 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+border-radius: 20px;
+border-radius: 20px;
+border-radius: 20px;
+border-radius: 20px;
 border-radius: 16px;
   width:220px;
   font-size:16px;
   color:#fff; 
   padding:12px;
   border-radius:16px;
+  backdrop-filter: blur(3px);
 }
 .grd2{
   background: linear-gradient(179deg, transparent, #0095DA);
@@ -150,4 +170,37 @@ video{
   align-items: center;
   justify-content: center;
   gap: 6px;
+}
+.bg1{
+  color:#fff;
+  background:url(./images//bg1.png);
+  background-size: cover;
+}
+
+.main::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.main::-webkit-scrollbar {
+  width: 0px !important;
+}
+
+.main::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.main::-webkit-scrollbar-thumb {
+  background-color: #cdd4e0;
+  border-radius: 20px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.main::-webkit-scrollbar-thumb {
+  background-color: #b1b9ca;
+}
+
+.main::-webkit-scrollbar-thumb:hover {
+  background-color: #6f7888;
 }

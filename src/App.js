@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import RVD from './npm/react-virtual-dom/react-virtual-dom';
 import b2 from './images/b2.png';
 import b3 from './images/b3.png';
@@ -7,35 +7,39 @@ import alimardanisrc from './images/alimardani.png';
 import footersrc from './images/footer.png';
 import AIODate from './npm/aio-date/aio-date';
 import AIOMap from './npm/aio-map/aio-map';
-import mapsrc from './images/map.png';
+import ACS from './npm/aio-content-slider/aio-content-slider';
+import JsxToHtml from './npm/aio-functions/jsx-to-html';
+import img11 from './images/ic.png';
+import bg2 from './images/bg2.png';
 import svgs from './svgs';
 import './App.css';
 
 function App() {
   let [map] = useState(new AIOMap({
-    apiKeys:{
-      map:'web.68bf1e9b8be541f5b14686078d1e48d2',
-      service:'service.30c940d0eff7403f9e8347160e384cc9'
+    apiKeys: {
+      map: 'web.68bf1e9b8be541f5b14686078d1e48d2',
+      service: 'service.30c940d0eff7403f9e8347160e384cc9'
     },
-    popup:{title:'موقعیت محل برگزاری همایش'},
-    markers:[
-      {latitude:35.7905040814412,longitude:51.40696048736573}
+    popup: { title: 'موقعیت محل برگزاری همایش' },
+    markers: [
+      { latitude: 35.7905040814412, longitude: 51.40696048736573 }
     ],
-    showMarker:false,
-    latitude:35.7905040814412,longitude:51.40696048736573
+    showMarker: false,
+    latitude: 35.7905040814412, longitude: 51.40696048736573
   }))
-  function row1_layout(){
+  function row1_layout() {
     return {
-      style: { background: '#000', color: '#fff' },
+      className: 'bg1',
       column: [
         {
-          column:[
-            { align: 'vh', html: svgs('burux') },
-            { html: 'دومین گردهمایی بزرگ الکتریکی های سراسر کشور', style: { textAlign: 'center' }, className: 'p-h-24', align: 'h' },
+          column: [
+            { size: 36 },
+            { align: 'vh', html: svgs('burux'), size: 100 },
+            { html: <div><span style={{fontWeight:'bold',fontSize:'110%'}}>دومین</span> گردهمایی بزرگ الکتریکی های سراسر کشور</div>, style: { textAlign: 'center' }, className: 'p-h-24 fs-36', align: 'h' },
             { size: 36 },
           ]
         },
-        {html:<TimeBoxes/>},
+        { html: <TimeBoxes /> },
         {
           row: [
             {
@@ -43,25 +47,25 @@ function App() {
               html: (<img src={b3} alt='' width='100%' height='80%' />)
             },
             { size: 12 },
-            {flex: 2,html: (<img src={b2} alt='' width='100%' />)},
+            { flex: 2, html: (<img src={b2} alt='' width='100%' />) },
           ]
         },
-        buttons_layout()
+        { html: (<img src={bg2} alt='' width='100%' />), style: { background: '#fff' } },
       ]
     }
   }
-  function row2_layout(){
+  function row2_layout() {
     return {
-      className: 'paint-1 p-b-72',
+      style: { background: '#fff' },
       column: [
         { size: 36 },
         tarikheBargozari_layout(),
-        { size: 36 },
-        mojri_layout(),
+        { html: (<img src={img11} width='100%' />), className: 'p-h-24' },
+        //mojri_layout(),
       ]
     }
   }
-  function row3_layout(){
+  function row3_layout() {
     return {
       style: { color: '#fff' },
       column: [
@@ -72,105 +76,134 @@ function App() {
             {
               size: 48, align: 'v',
               row: [
-                {size: 48, style: { background: '#0095DA', height: '100%' }},
+                { size: 48, style: { background: '#0095DA', height: '100%' } },
                 { size: 12 },
                 {
                   gap: 8, className: 'fs-20', align: 'v',
-                  row: [{ html: 'چرا در' },{ html: 'بلکس', className: 'bold fs-24' },{ html: 'شرکت کنم?' }]
+                  row: [{ html: 'چرا در' }, { html: 'بلکس', className: 'bold fs-24' }, { html: 'شرکت کنم?' }]
                 }
               ]
             },
             { size: 36 },
-            {gap:36,column:new Array(6).fill(0).map((o,i)=>dashBox_layout(i))},
-            {size:72},
-            {align:'vh',className:'fs-18 bold',html:'تنها تا ۱۸ آبان ماه فرصت برای ثبت نام است!'},
+            { gap: 36, column: new Array(6).fill(0).map((o, i) => dashBox_layout(i)) },
+            { size: 72 },
             {
-              align:'vh',className:'fs-14 p-16',style:{textAlign:'center',lineHeight:2},
-              html:'گروه صنعتی بروکس، دومین گردهمایی ملی با شما همکاران عزیز را با عنوان همایش بزرگ الکتریکی­های سراسر کشور BELEX 2023 همزمان با بیست و سومین نمایشگاه صنعت برق در روزهای 23 لغایت 26 آبان ماه 1402 برگزار خواهد کرد. همین حالا با ثبت نام، حضور خود در یکی از روزهای 23 تا 26 آبان، برای پیشرفت کسب و کار خود به ساده ­ترین روش اقدام کنید.'
+              style:{border:'1px solid #fff'},className:'m-24 p-24 br-16',
+              column: [
+                { align: 'vh', className: 'fs-16 bold', html: 'تنها تا ۱۸ آبان ماه فرصت برای ثبت نام است!' },
+                {size:36},
+                {
+                  align: 'vh', className: 'fs-14', style: { textAlign: 'center', lineHeight: 2 },
+                  html: 'گروه صنعتی بروکس، دومین گردهمایی ملی با شما همکاران عزیز را با عنوان همایش بزرگ الکتریکی­های سراسر کشور BELEX 2023 همزمان با بیست و سومین نمایشگاه صنعت برق در روزهای 23 لغایت 26 آبان ماه 1402 برگزار خواهد کرد.'
+                },
+                { size: 60 },
+                {
+                  align: 'vh', className: 'fs-14', style: { textAlign: 'center', lineHeight: 2 },
+                  html: ' همین حالا با ثبت نام، حضور خود در یکی از روزهای 23 تا 26 آبان، برای پیشرفت کسب و کار خود به ساده ­ترین روش اقدام کنید.'
+                },
+              ]
             },
-            {size:16},
-            {className:'p-h-16',html:(<button className='button-3'>همین حالا ثبت نام کنید</button>)},
-            {size:96}
           ]
         }
       ]
     }
   }
-  function row4_layout(){
+  function row4_layout() {
     return {
-      style:{background:'#fff'},
-      column:[
+      style: { background: '#fff' },
+      column: [
         {
-          html:'',style:{background:'#0095DA',height:24,borderRadius:'0 0 24px 24px'}
+          html: '', style: { background: '#0095DA', height: 24, borderRadius: '0 0 24px 24px' }
         },
         {
-          html:'برنامه همایش',className:'fs-24',align:'vh',size:120,
+          html: 'برنامه همایش', className: 'fs-24', align: 'vh', size: 120,
         },
         propgrams_layout(),
         video_layout(),
-        {size:48}
+        { size: 48 }
       ]
     }
   }
-  function row5_layout(){
+  
+  
+  async function share(){
+    try {
+      await navigator.share({
+        title: "همایش بلکس 2023",
+        text: "ثبت نام برای شرکت در همایش بزرگ بلکس 2023 تهران واقع در سالن همایش های صدا و سیما",
+        url: document.location.href,
+      })
+
+       /*
+         Show a message if the user shares something
+       */
+   } catch (err) {
+      /*
+         This error will appear if the user canceled the action of sharing.
+       */
+      alert(`Couldn't share ${err}`);
+   }
+  }
+  function row5_layout() {
     return {
-      style:{background:'#fff'},
-      column:[
+      style: { background: '#fff' },
+      column: [
         {
-          column:[
-            {html:'محل برگزاری',size:60,align:'vh'},
+          column: [
+            { html: 'محل برگزاری', size: 60, align: 'vh' },
             {
-              size:240,className:'p-12',
-              row:[
+              size: 240, className: 'p-12',
+              row: [
                 {
-                  flex:1,align:'v',
-                  column:[
-                    {html:'آدرس',className:'fs-16 bold'},
-                    {size:24},
+                  flex: 1, align: 'v',
+                  column: [
+                    { html: 'آدرس', className: 'fs-16 bold' },
+                    { size: 24 },
                     {
-                      html:'تهران ، اتوبان شهید چمران شمال ، نرسیده به هتل استقلال ، ورودی شمالی صدا و سیما ، درب اختصاصی مرکز همایش ها',
-                      className:'fs-14'
+                      html: 'تهران ، اتوبان شهید چمران شمال ، نرسیده به هتل استقلال ، ورودی شمالی صدا و سیما ، درب اختصاصی مرکز همایش ها',
+                      className: 'fs-14 t-a-right'
                     }
                   ]
                 },
-                {size:12},
+                { size: 12 },
                 {
-                  flex:1,
-                  html:map.render()
+                  flex: 1,
+                  html: map.render()
                 }
               ]
             },
-            {size:12},
+            { size: 12 },
             {
-              className:'p-h-12',
-              row:[
+              className: 'p-h-12',
+              row: [
                 {
-                  flex:1,align:'vh',
-                  html:(<button className='button-4'>
+                  flex: 1, align: 'vh',
+                  html: (<a className='button-2' href={'https://www.google.com/maps/place/Tehran+Province,+Tehran,+Namayeshgah,+Iran/@35.7909431,51.4070741,21z/data=!4m6!3m5!1s0x3f8e063f05847e43:0x13d203c15b177604!8m2!3d35.7908941!4d51.4068914!16s%2Fg%2F11c2w204jr'}>
                     <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9.59818 4.04464C11.0626 2.58017 13.437 2.58017 14.9015 4.04464L20.2048 9.34794C21.6693 10.8124 21.6693 13.1868 20.2048 14.6512L14.9015 19.9545C13.437 21.419 11.0626 21.419 9.59818 19.9545L4.29488 14.6512C2.83042 13.1868 2.83042 10.8124 4.29488 9.34794L9.59818 4.04464ZM13.8408 5.1053C12.9621 4.22662 11.5375 4.22662 10.6588 5.1053L5.35554 10.4086C4.47686 11.2873 4.47686 12.7119 5.35554 13.5906L10.6588 18.8939C11.5375 19.7726 12.9621 19.7726 13.8408 18.8939L19.1441 13.5906C20.0228 12.7119 20.0228 11.2873 19.1441 10.4086L13.8408 5.1053ZM12.4695 6.96926C12.7624 6.67637 13.2373 6.67637 13.5302 6.96926L15.7802 9.21926C16.0731 9.51215 16.0731 9.98703 15.7802 10.2799L13.5302 12.5299C13.2373 12.8228 12.7624 12.8228 12.4695 12.5299C12.1766 12.237 12.1766 11.7622 12.4695 11.4693L13.4392 10.4996H11.4998C11.0856 10.4996 10.7498 10.8354 10.7498 11.2496V14.9996C10.7498 15.4138 10.414 15.7496 9.99983 15.7496C9.58562 15.7496 9.24983 15.4138 9.24983 14.9996V11.2496C9.24983 10.0069 10.2572 8.99959 11.4998 8.99959H13.4392L12.4695 8.02992C12.1766 7.73703 12.1766 7.26215 12.4695 6.96926Z" fill="#404944"/>
-    </svg>
-    
+                      <path d="M9.59818 4.04464C11.0626 2.58017 13.437 2.58017 14.9015 4.04464L20.2048 9.34794C21.6693 10.8124 21.6693 13.1868 20.2048 14.6512L14.9015 19.9545C13.437 21.419 11.0626 21.419 9.59818 19.9545L4.29488 14.6512C2.83042 13.1868 2.83042 10.8124 4.29488 9.34794L9.59818 4.04464ZM13.8408 5.1053C12.9621 4.22662 11.5375 4.22662 10.6588 5.1053L5.35554 10.4086C4.47686 11.2873 4.47686 12.7119 5.35554 13.5906L10.6588 18.8939C11.5375 19.7726 12.9621 19.7726 13.8408 18.8939L19.1441 13.5906C20.0228 12.7119 20.0228 11.2873 19.1441 10.4086L13.8408 5.1053ZM12.4695 6.96926C12.7624 6.67637 13.2373 6.67637 13.5302 6.96926L15.7802 9.21926C16.0731 9.51215 16.0731 9.98703 15.7802 10.2799L13.5302 12.5299C13.2373 12.8228 12.7624 12.8228 12.4695 12.5299C12.1766 12.237 12.1766 11.7622 12.4695 11.4693L13.4392 10.4996H11.4998C11.0856 10.4996 10.7498 10.8354 10.7498 11.2496V14.9996C10.7498 15.4138 10.414 15.7496 9.99983 15.7496C9.58562 15.7496 9.24983 15.4138 9.24983 14.9996V11.2496C9.24983 10.0069 10.2572 8.99959 11.4998 8.99959H13.4392L12.4695 8.02992C12.1766 7.73703 12.1766 7.26215 12.4695 6.96926Z" fill="currentColor" />
+                    </svg>
+
                     مسیر یابی
-                  </button>)
+                  </a>)
                 },
-                {size:12},
+                { size: 12 },
                 {
-                  flex:1,align:'vh',
-                  html:(<button className='button-4'>
+                  flex: 1, align: 'vh',
+                  html: (<button className='button-5' onClick={()=>share()}>
                     <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M14.6501 6.60191C14.6501 4.94405 15.9941 3.6001 17.6519 3.6001C19.3098 3.6001 20.6537 4.94405 20.6537 6.60191C20.6537 8.25976 19.3098 9.60372 17.6519 9.60372C16.6919 9.60372 15.8372 9.15309 15.2877 8.45182L9.74811 11.2216C9.81463 11.4699 9.8501 11.7309 9.8501 12.0001C9.8501 12.2692 9.81466 12.5301 9.74819 12.7782L15.2893 15.5488C15.8385 14.8494 16.6918 14.4001 17.6501 14.4001C19.307 14.4001 20.6501 15.7432 20.6501 17.4001C20.6501 19.057 19.307 20.4001 17.6501 20.4001C15.9932 20.4001 14.6501 19.057 14.6501 17.4001C14.6501 17.1309 14.6855 16.87 14.752 16.6218L9.211 13.8513C8.66177 14.5508 7.80841 15.0001 6.8501 15.0001C5.19324 15.0001 3.8501 13.657 3.8501 12.0001C3.8501 10.3432 5.19324 9.0001 6.8501 9.0001C7.80829 9.0001 8.66156 9.44932 9.21079 10.1486L14.7515 7.37829C14.6853 7.13065 14.6501 6.87039 14.6501 6.60191ZM17.6519 4.8001C16.6568 4.8001 15.8501 5.6068 15.8501 6.60191C15.8501 7.59702 16.6568 8.40372 17.6519 8.40372C18.647 8.40372 19.4537 7.59702 19.4537 6.60191C19.4537 5.6068 18.647 4.8001 17.6519 4.8001ZM17.6501 15.6001C16.656 15.6001 15.8501 16.406 15.8501 17.4001C15.8501 18.3942 16.656 19.2001 17.6501 19.2001C18.6442 19.2001 19.4501 18.3942 19.4501 17.4001C19.4501 16.406 18.6442 15.6001 17.6501 15.6001ZM5.0501 12.0001C5.0501 12.9942 5.85599 13.8001 6.8501 13.8001C7.84421 13.8001 8.6501 12.9942 8.6501 12.0001C8.6501 11.006 7.84421 10.2001 6.8501 10.2001C5.85599 10.2001 5.0501 11.006 5.0501 12.0001Z" fill="#404944"/>
-    </svg>
-    
+                      <path d="M14.6501 6.60191C14.6501 4.94405 15.9941 3.6001 17.6519 3.6001C19.3098 3.6001 20.6537 4.94405 20.6537 6.60191C20.6537 8.25976 19.3098 9.60372 17.6519 9.60372C16.6919 9.60372 15.8372 9.15309 15.2877 8.45182L9.74811 11.2216C9.81463 11.4699 9.8501 11.7309 9.8501 12.0001C9.8501 12.2692 9.81466 12.5301 9.74819 12.7782L15.2893 15.5488C15.8385 14.8494 16.6918 14.4001 17.6501 14.4001C19.307 14.4001 20.6501 15.7432 20.6501 17.4001C20.6501 19.057 19.307 20.4001 17.6501 20.4001C15.9932 20.4001 14.6501 19.057 14.6501 17.4001C14.6501 17.1309 14.6855 16.87 14.752 16.6218L9.211 13.8513C8.66177 14.5508 7.80841 15.0001 6.8501 15.0001C5.19324 15.0001 3.8501 13.657 3.8501 12.0001C3.8501 10.3432 5.19324 9.0001 6.8501 9.0001C7.80829 9.0001 8.66156 9.44932 9.21079 10.1486L14.7515 7.37829C14.6853 7.13065 14.6501 6.87039 14.6501 6.60191ZM17.6519 4.8001C16.6568 4.8001 15.8501 5.6068 15.8501 6.60191C15.8501 7.59702 16.6568 8.40372 17.6519 8.40372C18.647 8.40372 19.4537 7.59702 19.4537 6.60191C19.4537 5.6068 18.647 4.8001 17.6519 4.8001ZM17.6501 15.6001C16.656 15.6001 15.8501 16.406 15.8501 17.4001C15.8501 18.3942 16.656 19.2001 17.6501 19.2001C18.6442 19.2001 19.4501 18.3942 19.4501 17.4001C19.4501 16.406 18.6442 15.6001 17.6501 15.6001ZM5.0501 12.0001C5.0501 12.9942 5.85599 13.8001 6.8501 13.8001C7.84421 13.8001 8.6501 12.9942 8.6501 12.0001C8.6501 11.006 7.84421 10.2001 6.8501 10.2001C5.85599 10.2001 5.0501 11.006 5.0501 12.0001Z" fill="currentColor" />
+                    </svg>
+
                     اشتراک گذاری
                   </button>)
                 }
               ]
             },
-            {size:36},
-            {html:'به ما بپیوندید و در این همایش شرکت کنید',align:'vh',className:'fs-20 p-24',style:{textAlign:'center'}},
-            {className:'p-h-12',html:(<button className='button-2'>ثبت نام</button>)},
-            {size:48}
+            
+            { size: 48 },
+            { html: 'منتظر حضور گرم شما هستیم ', align: 'vh', className: 'fs-20 bold', style: { textAlign: 'center' } },
+            { html: 'دیدار ما، از 22 تا 26 آبان ماه 1402 ', align: 'vh', className: 'fs-18', style: { textAlign: 'center' } },
+            { size: 48 }
           ]
         }
       ]
@@ -178,41 +211,43 @@ function App() {
   }
   function buttons_layout() {
     return {
-      className: 'buttons',
-      row: [
+      className: 'buttons p-12',
+      style: { boxShadow: '0 0 6px 1px rgba(0,0,0,0.3)' },
+      column: [
         {
-          flex: 1, className: 'p-h-12',
-          html: (
-            <button className='button-1'>زمان و محل برگزاری</button>
-          )
-        },
-        {
-          flex: 1, className: 'p-h-12',
+          className: 'p-h-24 m-b-12',
           html: (
             <button className='button-2'>ثبت نام رایگان</button>
           )
-        }
+        },
+        {
+          style: { color: '#0080BB' }, align: 'vh',
+          className: 'fs-14 m-b-24 bold',
+          html: (
+            '23 تا 26 آبان در تهران، سالن همایش های صدا و سیما'
+          )
+        },
       ]
     }
   }
-  function mojri_layout(){
+  function mojri_layout() {
     return {
       gap: 6,
       row: [
         {
           flex: 4, align: 'v', className: 'grd-1 br-12 h-100 p-12',
           column: [
-            { html: 'با اجرای جناب آقای', className: 'c747474 fs-14',style:{textAlign:'right'} },
+            { html: 'با اجرای جناب آقای', className: 'c747474 fs-14', style: { textAlign: 'right' } },
             { html: 'محمدرضا علیمردانی', className: 'fs-18 bold zereshki' }
           ]
         },
-        {flex: 5, html: (<img src={alimardanisrc} alt='' />)}
+        { flex: 5, html: (<img src={alimardanisrc} alt='' />) }
       ]
     }
   }
-  function tarikheBargozari_layout(){
+  function tarikheBargozari_layout() {
     return {
-      column:[
+      column: [
         {
           className: 'c747474', align: 'vh', gap: 6,
           row: [
@@ -226,126 +261,136 @@ function App() {
                 </svg>
               )
             },
-            {html: 'نمایشگاه بین المللی صنعت برق', className: 'fs-14'}
+            { html: 'نمایشگاه بین المللی صنعت برق', className: 'fs-14' }
           ]
         },
         { size: 36 },
         { html: 'زمان برگزاری:', className: 'fs-18 bold p-h-48 m-b-12' },
         {
-          align: 'vh', gap: 12, className: 'p-v-12',
-          row: [22, 23, 24, 25, 26].map((day) => {return {className: 'of-visible',html: (<div className='day-box'>{day}</div>)}})
+          align: 'vh', gap: 24, className: 'p-v-12',gapHtml:()=>'و',gapAttrs:{style:{fontSize:14}},
+          row: [23, 24, 25, 26].map((day) => { return { className: 'of-visible', html: (<div className='day-box'>{day}</div>) } })
         },
         { size: 12 },
-        {align: 'vh', className: 'of-visible',html: <div className='date-box of-visible p-v-12 align-vh'>آبان ماه 1402</div>},
-        { size: 72, html: 'محل :تهران، سالن همایش های صدا و سیما', className: 'fs-14 bold', align: 'vh',style:{color:'#004869'} },
+        { align: 'vh', className: 'of-visible', html: <div className='date-box of-visible p-v-12 align-vh'>آبان ماه 1402</div> },
+        { size: 36 }
       ]
     }
   }
   function dashBox_layout(index) {
-    let title = ['دورهمی شاد و خاطره ساز','شانس و جایزه ','تخفیفات باور نکردنی','معرفی محصولات جدید','کسب و کار جدید','هدفی بزرگ اما نزدیک'][index]
+    let title = ['دورهمی شاد و خاطره ساز', 'شانس و جایزه ', 'تخفیفات باور نکردنی', 'معرفی محصولات جدید', 'کسب و کار جدید', 'هدفی بزرگ اما نزدیک'][index]
     let text = [
-      ' لحظاتی شاد و مفرح با اجرای جذاب و بیادماندنی محمدرضا علیمردانی',
-      ' شرکت در قرعه کشی بزرگِ سال',
+      ' لحظاتی شاد و مفرح با اجرای جذاب و بیادماندنی ',
+      'شرکت در قرعه کشی بزرگِ سال با اجرای مسابقه به همراه تخفیف و جوایز ویژه',
       'خرید با قیمت ها و شرایط ویژه که فقط برای حاضرین امکانپذیر است',
       'آشنایی با محصولات جدید بروکس در حوزه روشنایی، ابزار، محافظ و چندراهی، برق صنعتی و هوشمندسازی',
       'چگونه بدون هزینه فروش اینترنتی خود را افزایش دهید!',
       'شاید امروز همان روزی است که باید برای هدف بزرگت قدمی حتی کوچک برداری پس همین امروز شروع کن'
     ][index]
     return {
-      className:'p-h-12',
+      className: 'p-h-12',
       row: [
-        {html: '',flex:index % 2 === 0?undefined:1},
-        {className: 'dash-box1',gap:12,column: [{html: svgs('dashBox' + index)},{html: title, className: 'bold'},{html: text}]}
+        { align:'vh',html: svgs('dashBox' + index), flex: 1,show:index % 2 === 0 },
+        { className: 'dash-box1', gap: 12, column: [{ html: title, className: 'bold' }, { html: text,className:'t-a-right' }] },
+        { align:'vh',html: svgs('dashBox' + index), flex: 1,show:index % 2 !== 0 }
       ]
     }
   }
-  function propgrams_layout(){
+  function propgrams_layout() {
     let list = [
       {
-        title:'خوش‌آمد گویی به مهمانان محترم',
-        text:'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'خوش‌آمد گویی به مهمانان محترم',
+        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
       },
       {
-        title:'خوش‌آمد گویی به مهمانان محترم',
-        text:'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'خوش‌آمد گویی به مهمانان محترم',
+        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
       },
       {
-        title:'خوش‌آمد گویی به مهمانان محترم',
-        text:'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'خوش‌آمد گویی به مهمانان محترم',
+        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
       },
       {
-        title:'خوش‌آمد گویی به مهمانان محترم',
-        text:'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'خوش‌آمد گویی به مهمانان محترم',
+        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
       },
       {
-        title:'خوش‌آمد گویی به مهمانان محترم',
-        text:'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'خوش‌آمد گویی به مهمانان محترم',
+        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
       }
     ]
-    return {gap:12,className:'ofx-auto',row:list.map((o)=>program_layout(o))}
+    return { gap: 12, className: 'm-b-24', html: <ACS arrow={false} items={list.map((o) => program_card(o))} /> }
   }
-  function program_layout({title,text}){
-    return {
-      className:'w-264',
-      column:[
-        {
-          size:48,align:'v',
-          row:[
-            {size:16,html:<div style={{height:3,background:'orange',width:'100%'}}></div>},
-            {html:<div style={{height:3,background:'orange',width:36,height:36,}} className='br-100'></div>},
-            {flex:1,html:<div style={{height:3,background:'orange',width:'100%'}}></div>},
-            
+  function program_card({ title, text }) {
+    return (
+      <RVD
+        layout={{
+          className: 'w-264 dir-rtl p-h-24',
+          column: [
+            {
+              size: 48, align: 'v',
+              row: [
+                { size: 16, html: <div className='h-3 w-100' style={{ background: 'orange' }}></div> },
+                { html: <div style={{ background: 'orange' }} className='br-100 h-3 w-36 h-36'></div> },
+                { flex: 1, html: <div className='h-3 w-100' style={{ background: 'orange' }}></div> },
+
+              ]
+            },
+            { size: 12 },
+            { html: title, className: 'fs-16 bold t-a-right' },
+            { size: 36 },
+            { html: text, className: 'fs-14 t-a-right' },
+            { size: 24 }
           ]
-        },
-        {size:12},
-        {html:title,className:'fs-16 bold'},
-        {size:36},
-        {html:text,className:'fs-14'},
-        {size:24}
-      ]
-    }
+        }}
+      />
+    )
   }
-  function video_layout(){
+  function video_layout() {
     return {
-      column:[
-        {size:60,html:'تجربه موفق سال قبل',className:'fs-20',align:'vh'},
-        { 
-          className:'p-h-12',
-          html:(
-            <video width="400" controls>
-              <source src="https://cdn.flowplayer.com/a30bd6bc-f98b-47bc-abf5-97633d4faea0/hls/de3f6ca7-2db3-4689-8160-0f574a5996ad/playlist.m3u8" type="video/mp4"/>
-              Your browser does not support HTML video.
-            </video>
+      column: [
+        { size: 60, html: 'تجربه موفق سال قبل', className: 'fs-20', align: 'vh' },
+        {
+          align:'vh',
+          html: (
+            
+            <div class="h_iframe-aparat_embed_frame" style={{width:'100%'}}>
+            <iframe className='w-100' src="https://www.aparat.com/video/video/embed/videohash/QMCfy/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe></div>
           )
-        
+
         }
       ]
     }
   }
-  function bazarMiarze_layout(){
+  function bazarMiarze_layout() {
     return {
-      html:(
+      html: (
         <img
           src={bmsrc} width='100%' alt=""
         />
       )
     }
   }
-  function footer_layout(){return {html:(<img src={footersrc} width='100%' alt=""/>)}}
-  
+  function footer_layout() { return { html: (<img src={footersrc} width='100%' alt="" />) } }
+
   return (
     <RVD
       layout={{
         className: 'fs-24 container',
         column: [
-          row1_layout(),
-          row2_layout(),
-          row3_layout(),
-          row4_layout(),
-          bazarMiarze_layout(),
-          row5_layout(),
-          footer_layout(),
-          
+          {
+            flex: 1, className: 'ofy-auto main',
+            column: [
+              row1_layout(),
+              row2_layout(),
+              row3_layout(),
+              row4_layout(),
+              bazarMiarze_layout(),
+              row5_layout(),
+              footer_layout(),
+            ]
+          },
+          buttons_layout()
+
         ]
       }}
     />
@@ -355,10 +400,10 @@ export default App;
 
 
 function TimeBoxes() {
-  let [delta,setDelta] = useState(AIODate().getDelta({date:'1402/8/22'}))
-  setInterval(()=>{
-    setDelta(AIODate().getDelta({date:'1402/8/22'}))
-  },1000)
+  let [delta, setDelta] = useState(AIODate().getDelta({ date: '1402/8/22' }))
+  setInterval(() => {
+    setDelta(AIODate().getDelta({ date: '1402/8/22' }))
+  }, 1000)
   function timeBox_layout(n, unit) {
     return {
       column: [
@@ -370,7 +415,7 @@ function TimeBoxes() {
           )
         },
         { size: 6 },
-        { html: unit, className: 'fs-12', align: 'vh', style: { color: '#aaa' } }
+        { html: unit, className: 'fs-12', align: 'vh', style: { color: '#fff' } }
       ]
     }
   }
@@ -378,7 +423,7 @@ function TimeBoxes() {
     <RVD
       layout={{
         column: [
-          { html: 'تا شروع', align: 'vh', className: 'fs-18', style: { color: '#aaa' } },
+          { html: 'تا شروع', align: 'vh', className: 'fs-18', style: { color: '#fff' } },
           { size: 12 },
           {
             row: [
