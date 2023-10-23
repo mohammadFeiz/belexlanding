@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import RVD from './npm/react-virtual-dom/react-virtual-dom';
+import AIODate from './npm/aio-date/aio-date';
+import AIOMap from './npm/aio-map/aio-map';
+import ACS from './npm/aio-content-slider/aio-content-slider';
 import b2 from './images/b2.png';
 import b3 from './images/b3.png';
 import bmsrc from './images/bm.png';
 import alimardanisrc from './images/alimardani.png';
 import footersrc from './images/footer.png';
-import AIODate from './npm/aio-date/aio-date';
-import AIOMap from './npm/aio-map/aio-map';
-import ACS from './npm/aio-content-slider/aio-content-slider';
-import JsxToHtml from './npm/aio-functions/jsx-to-html';
 import img11 from './images/ic.png';
 import bg2 from './images/bg2.png';
 import svgs from './svgs';
