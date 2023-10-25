@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
 import RVD from './npm/react-virtual-dom/react-virtual-dom';
 import AIODate from './npm/aio-date/aio-date';
+import AIOInput from './npm/aio-input/aio-input';
 import AIOMap from './npm/aio-map/aio-map';
-import ACS from './npm/aio-content-slider/aio-content-slider';
-import b2 from './images/b2.png';
-import b3 from './images/b3.png';
+import AIOservice from './npm/aio-service/aio-service';
+import getApiFunctions from './apis';
+import row1src from './images/row1.png';
 import bmsrc from './images/bm.png';
-import alimardanisrc from './images/alimardani.png';
+import mojrisrc from './images/mojri.png';
 import footersrc from './images/footer.png';
 import img11 from './images/ic.png';
 import bg2 from './images/bg2.png';
+import frame1 from './images/frame1.png';
+import registersrc from './images/register.png';
 import svgs from './svgs';
 import './App.css';
+import Icon from '@mdi/react';
+import { mdiClose } from '@mdi/js';
 
 function App() {
+  let [register,setRegister] = useState(false);
   let [map] = useState(new AIOMap({
     apiKeys: {
       map: 'web.68bf1e9b8be541f5b14686078d1e48d2',
@@ -30,26 +36,17 @@ function App() {
     return {
       className: 'bg1',
       column: [
+        {html:<img src={row1src} width='100%'/>},
         {
+          className:'titr',
           column: [
-            { size: 36 },
+            { size: 24 },
             { align: 'vh', html: svgs('burux'), size: 100 },
-            { html: <div><span style={{fontWeight:'bold',fontSize:'110%'}}>دومین</span> گردهمایی بزرگ الکتریکی های سراسر کشور</div>, style: { textAlign: 'center' }, className: 'p-h-24 fs-36', align: 'h' },
-            { size: 36 },
+            { html: <div><span style={{fontWeight:'bold',fontSize:'110%'}}>دومین</span> گردهمایی بزرگ الکتریکی های سراسر کشور</div>, style: { textAlign: 'center' }, className: 'p-h-24', align: 'h' },
+            {size:24},
+            { html: <TimeBoxes /> },
           ]
-        },
-        { html: <TimeBoxes /> },
-        {
-          row: [
-            {
-              flex: 3, style: { alignItems: 'flex-end' },
-              html: (<img src={b3} alt='' width='100%' height='80%' />)
-            },
-            { size: 12 },
-            { flex: 2, html: (<img src={b2} alt='' width='100%' />) },
-          ]
-        },
-        { html: (<img src={bg2} alt='' width='100%' />), style: { background: '#fff' } },
+        }
       ]
     }
   }
@@ -57,10 +54,11 @@ function App() {
     return {
       style: { background: '#fff' },
       column: [
+        { html: (<img src={mojrisrc} alt='' width='100%' />), style: { background: '#fff' } },
+        { html: (<img src={bg2} alt='' width='100%' />), style: { background: '#fff' } },
         { size: 36 },
         tarikheBargozari_layout(),
-        { html: (<img src={img11} width='100%' />), className: 'p-h-24' },
-        //mojri_layout(),
+        { html: (<img src={img11} width='100%' />), className: 'p-h-24' }
       ]
     }
   }
@@ -87,21 +85,8 @@ function App() {
             { gap: 36, column: new Array(6).fill(0).map((o, i) => dashBox_layout(i)) },
             { size: 72 },
             {
-              style:{border:'1px solid #fff'},className:'m-24 p-24 br-16',
-              column: [
-                { align: 'vh', className: 'fs-16 bold', html: 'تنها تا ۱۸ آبان ماه فرصت برای ثبت نام است!' },
-                {size:36},
-                {
-                  align: 'vh', className: 'fs-14', style: { textAlign: 'center', lineHeight: 2 },
-                  html: 'گروه صنعتی بروکس، دومین گردهمایی ملی با شما همکاران عزیز را با عنوان همایش بزرگ الکتریکی­های سراسر کشور BELEX 2023 همزمان با بیست و سومین نمایشگاه صنعت برق در روزهای 23 لغایت 26 آبان ماه 1402 برگزار خواهد کرد.'
-                },
-                { size: 60 },
-                {
-                  align: 'vh', className: 'fs-14', style: { textAlign: 'center', lineHeight: 2 },
-                  html: ' همین حالا با ثبت نام، حضور خود در یکی از روزهای 23 تا 26 آبان، برای پیشرفت کسب و کار خود به ساده ­ترین روش اقدام کنید.'
-                },
-              ]
-            },
+              html:<img src={frame1} width='100%'/>
+            }
           ]
         }
       ]
@@ -216,7 +201,7 @@ function App() {
         {
           className: 'p-h-24 m-b-12',
           html: (
-            <button className='button-2'>ثبت نام رایگان</button>
+            <button className='button-2' onClick={()=>setRegister(true)}>ثبت نام رایگان</button>
           )
         },
         {
@@ -226,21 +211,6 @@ function App() {
             '23 تا 26 آبان در تهران، سالن همایش های صدا و سیما'
           )
         },
-      ]
-    }
-  }
-  function mojri_layout() {
-    return {
-      gap: 6,
-      row: [
-        {
-          flex: 4, align: 'v', className: 'grd-1 br-12 h-100 p-12',
-          column: [
-            { html: 'با اجرای جناب آقای', className: 'c747474 fs-14', style: { textAlign: 'right' } },
-            { html: 'محمدرضا علیمردانی', className: 'fs-18 bold zereshki' }
-          ]
-        },
-        { flex: 5, html: (<img src={alimardanisrc} alt='' />) }
       ]
     }
   }
@@ -297,49 +267,46 @@ function App() {
   function propgrams_layout() {
     let list = [
       {
-        title: 'خوش‌آمد گویی به مهمانان محترم',
-        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'فروشگاه آنلاین می ارزه',
+        text: 'بهترین لذت زندگی آن است که کاری انجام دهید که دیگران می­گویند تو نمیتوانی'
       },
       {
-        title: 'خوش‌آمد گویی به مهمانان محترم',
-        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'محصولات جدید و تخفیفات ویژه',
+        text: 'فرصتی کوتاه برای خریدی آسان با قیمت­ها و شرایط ویژه و تکرار نشدنی و معرفی محصولات جدید'
       },
       {
-        title: 'خوش‌آمد گویی به مهمانان محترم',
-        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
-      },
-      {
-        title: 'خوش‌آمد گویی به مهمانان محترم',
-        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
-      },
-      {
-        title: 'خوش‌آمد گویی به مهمانان محترم',
-        text: 'تلاوت قرآن کریم، خوش آمد گویی به مهمانان و سخنرانی مدیرعامل بروکس در رابطه با همایش'
+        title: 'مسابقه و قرعه کشی های متعدد',
+        text: 'بلکس 2023، علاوه بر ایجاد اوقاتی شاد و مفرح برای شما الکتریکی عزیز، فرصت مشارکت در قرعه کشی بزرگ سال را فراهم می­کند.'
       }
     ]
-    return { gap: 12, className: 'm-b-24', html: <ACS arrow={false} items={list.map((o) => program_card(o))} /> }
+    return { className: 'm-b-24', column: list.map((o,i) => {return {html:program_card(o,i)}})}
   }
-  function program_card({ title, text }) {
+  function program_card({ title, text },index) {
     return (
       <RVD
         layout={{
-          className: 'w-264 dir-rtl p-h-24',
-          column: [
+          className: 'dir-rtl p-h-12',
+          row:[
             {
-              size: 48, align: 'v',
-              row: [
-                { size: 16, html: <div className='h-3 w-100' style={{ background: 'orange' }}></div> },
-                { html: <div style={{ background: 'orange' }} className='br-100 h-3 w-36 h-36'></div> },
-                { flex: 1, html: <div className='h-3 w-100' style={{ background: 'orange' }}></div> },
+              column: [
+                { size:36,html: <div style={{ background: 'orange',color:'#fff' }} className='br-100 h-3 w-36 h-36'>{index + 1}</div>,align:'vh' },
+                { flex: 1, html: <div className='w-3 h-100' style={{ background: 'orange' }}></div> ,align:'h'},
 
               ]
             },
-            { size: 12 },
-            { html: title, className: 'fs-16 bold t-a-right' },
-            { size: 36 },
-            { html: text, className: 'fs-14 t-a-right' },
-            { size: 24 }
+            {size:12},
+            {
+              flex:1,
+              column: [
+                { html: title, className: 'fs-16 bold t-a-right',size:36,align:'v' },
+                { size: 12 },
+                { html: text, className: 'fs-14 t-a-right' },
+                { size: 24 },
+                
+              ]
+            }
           ]
+          
         }}
       />
     )
@@ -370,7 +337,9 @@ function App() {
     }
   }
   function footer_layout() { return { html: (<img src={footersrc} width='100%' alt="" />) } }
-
+  if(register){
+    return <Register onClose={()=>setRegister(false)}/>
+  }
   return (
     <RVD
       layout={{
@@ -410,11 +379,11 @@ function TimeBoxes() {
           style: { border: '1px solid #fff' },
           className: 'br-8 w-60 h-60 p-3',
           html: (
-            <div className='w-100 h-100 br-6 align-vh fs-24 bold' style={{ background: '#fff', color: 'orange' }}>{n}</div>
+            <div className='w-100 h-100 br-6 align-vh fs-24 bold' style={{ background: '#00A9F7', color: '#fff' }}>{n}</div>
           )
         },
         { size: 6 },
-        { html: unit, className: 'fs-12', align: 'vh', style: { color: '#fff' } }
+        { html: unit, className: 'fs-14 bold', align: 'vh', style:{ color: '#00A9F7'} }
       ]
     }
   }
@@ -422,7 +391,7 @@ function TimeBoxes() {
     <RVD
       layout={{
         column: [
-          { html: 'تا شروع', align: 'vh', className: 'fs-18', style: { color: '#fff' } },
+          { html: 'تا شروع', align: 'vh', className: 'fs-18 bold', style: { color: '#00A9F7' } },
           { size: 12 },
           {
             row: [
@@ -444,4 +413,167 @@ function TimeBoxes() {
       }}
     />
   )
+}
+
+function Register(props){
+  let [interCode,setInterCode] = useState(false);
+  let [code,setCode] = useState('')
+  let [apis] = useState(new AIOservice({
+    id:'belex',
+    getApiFunctions,
+
+  }))
+  function header_layout(){
+    return {
+      className:'register-header',
+      column:[
+        {
+          size:48,
+          row:[
+            {size:48,align:'vh',html:<Icon path={mdiClose} size={1}/>,onClick:()=>onClose()},
+            {flex:1,html:'بستن',align:'v'}
+          ]
+        }
+      ]
+    }
+  }
+  function billboard_layout(){
+    return {
+      html:(
+        <img src={registersrc} width='100%' />
+      )
+    }
+  }
+  function label_layout(){
+    return {
+      column:[
+        {size:12},
+        {html:'اطلاعات شرکت کننده',className:'fs-16 bold p-h-12'},
+        {html:'با مشخصات شما کارت ورود به همایش صادر خواهد شد، لطفا از صحت آنها اطمینان حاصل فرمائید.',className:'fs-14 p-h-12 t-a-right'},
+        
+      ]
+    }
+  }
+  function form_layout(model){
+    return {
+      html:(
+        <AIOInput
+          type='form' lang='fa'
+          value={{...model}}
+          onChange={(newModel)=>{
+            setModel(newModel)
+          }}
+          onSubmit={()=>submit()}
+          submitText='دریافت کد تایید'
+          inputs={{
+            column:[
+              {input:{type:'text'},label:'نام',field:'value.firstname',validations:[['required']]},
+              {input:{type:'text'},label:'نام خانوادگی',field:'value.lastname',validations:[['required']]},
+              {input:{type:'text',justNumber:true},label:'شماره همراه',field:'value.mobile',validations:[['required'],['length=',11]]},
+              {input:{type:'text',justNumber:true},label:'کد ملی',field:'value.nationalCode',validations:[['required']]},
+              {input:{type:'text'},label:'استان',field:'value.province',validations:[['required']]},
+              {input:{type:'textarea'},label:'آدرس ( اختیاری )',field:'value.address'},
+              {
+                input:{
+                  type:'radio',optionStyle:{width:'100%'},
+                  options:[
+                    {text:'سه شنبه 23 آبان ',value:'23'},
+                    {text:'چهار شنبه 24 آبان ',value:'24'},
+                    {text:'پنج شنبه 25 آبان ',value:'25'},
+                    {text:'جمعه 26 آبان ',value:'26'},
+                  ]
+                },
+                label:'زمان شرکت در همایش',field:'value.day',
+                validations:[['required']]
+              },
+            ]
+          }}
+        />
+      )
+    }
+  }
+  function submit(){
+    setInterCode(true)
+  }
+  function onClose(){
+    if(interCode){setInterCode(false)}
+    else{props.onClose()}
+  }
+  function codeLabel_layout(){
+    return {
+      flex:1,className:'code-description',
+      align:'vh',html:'کد تائید 5 رقمی به شماره موبایل شما ارسال شد'
+    }
+  }
+  function code_layout(){
+    return {
+      column:[
+        {className:'code-label',html:'کد دریافت شده را وارد نمائید'},
+        {
+          className:'code-input',
+          html:(
+            <AIOInput
+              type='text'
+              justNumber={true}
+              maxLength={4}
+              value={code}
+              onChange={(code)=>setCode(code)}
+            />
+          )
+        }
+      ]
+    }
+  }
+  function codeSubmit_layout(){
+    return {
+      flex:1,className:'code-submit',
+      column:[
+        {flex:1},
+        {
+          html:(
+            <button className='button-2'>ثبت نام</button>
+          )
+        }
+      ]
+    }
+  }
+  let [model,setModel] = useState({
+    fisrtname:'',
+    lastname:'',
+    mobile:'',
+    nationalCode:'',
+    province:'',
+    address:'',
+    day:''
+
+  });
+  
+  return (
+    <RVD
+      layout={{
+        className: 'fs-24 container',style:{background:'#fff'},
+        column: [
+          header_layout(),
+          {
+            show:!interCode,
+            flex: 1, className: 'ofy-auto main',
+            column: [
+              billboard_layout(),
+              label_layout(),
+              form_layout(model)
+            ]
+          },
+          {
+            show:!!interCode,
+            flex: 1, className: 'ofy-auto main p-24',
+            column: [
+              codeLabel_layout(),
+              code_layout(),
+              codeSubmit_layout()
+            ]
+          },
+        ]
+      }}
+    />
+  );
 }
