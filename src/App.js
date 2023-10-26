@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RVD from './npm/react-virtual-dom/react-virtual-dom';
 import AIODate from './npm/aio-date/aio-date';
 import AIOInput from './npm/aio-input/aio-input';
 import AIOMap from './npm/aio-map/aio-map';
-import AIOservice from './npm/aio-service/aio-service';
+import AIOService from './npm/aio-service/aio-service';
 import getApiFunctions from './apis';
 import row1src from './images/row1.png';
 import bmsrc from './images/bm.png';
@@ -104,7 +104,6 @@ function App() {
         },
         propgrams_layout(),
         video_layout(),
-        { size: 48 }
       ]
     }
   }
@@ -141,10 +140,10 @@ function App() {
                 {
                   flex: 1, align: 'v',
                   column: [
-                    { html: 'آدرس', className: 'fs-16 bold' },
+                    { html: 'نشانی', className: 'fs-16 bold' },
                     { size: 24 },
                     {
-                      html: 'تهران ، اتوبان شهید چمران شمال ، نرسیده به هتل استقلال ، ورودی شمالی صدا و سیما ، درب اختصاصی مرکز همایش ها',
+                      html: 'تهران - اتوبان شهید چمران شمال - نرسیده به هتل استقلال - ورودی شمالی صدا و سیما - درب اختصاصی مرکز همایش ها',
                       className: 'fs-14 t-a-right'
                     }
                   ]
@@ -186,7 +185,7 @@ function App() {
             
             { size: 48 },
             { html: 'منتظر حضور گرم شما هستیم ', align: 'vh', className: 'fs-20 bold', style: { textAlign: 'center' } },
-            { html: 'دیدار ما، از 22 تا 26 آبان ماه 1402 ', align: 'vh', className: 'fs-18', style: { textAlign: 'center' } },
+            { html: 'دیدار ما، از 23 تا 26 آبان ماه 1402 ', align: 'vh', className: 'fs-18', style: { textAlign: 'center' } },
             { size: 48 }
           ]
         }
@@ -236,7 +235,7 @@ function App() {
         { size: 36 },
         { html: 'زمان برگزاری:', className: 'fs-18 bold p-h-48 m-b-12' },
         {
-          align: 'vh', gap: 24, className: 'p-v-12',gapHtml:()=>'و',gapAttrs:{style:{fontSize:14}},
+          align: 'vh', gap: 24, className: 'p-v-12',gapAttrs:{style:{fontSize:14}},
           row: [23, 24, 25, 26].map((day) => { return { className: 'of-visible', html: (<div className='day-box'>{day}</div>) } })
         },
         { size: 12 },
@@ -417,12 +416,20 @@ function TimeBoxes() {
 
 function Register(props){
   let [interCode,setInterCode] = useState(false);
-  let [code,setCode] = useState('')
-  let [apis] = useState(new AIOservice({
+  let [code,setCode] = useState('');
+  let [success,setSuccess] = useState(false);
+  let [provinces,setProvinces] = useState([])
+  let [apis] = useState(new AIOService({
     id:'belex',
     getApiFunctions,
 
   }))
+  useEffect(()=>{
+    apis.request({
+      api:'getProvinces',onSuccess:(provinces)=>setProvinces(provinces)
+    })
+  },[])
+  
   function header_layout(){
     return {
       className:'register-header',
@@ -463,7 +470,7 @@ function Register(props){
           onChange={(newModel)=>{
             setModel(newModel)
           }}
-          onSubmit={()=>submit()}
+          onSubmit={()=>submit('submitPhoneNumber',model,()=>setInterCode(true))}
           submitText='دریافت کد تایید'
           inputs={{
             column:[
@@ -471,7 +478,7 @@ function Register(props){
               {input:{type:'text'},label:'نام خانوادگی',field:'value.lastname',validations:[['required']]},
               {input:{type:'text',justNumber:true},label:'شماره همراه',field:'value.mobile',validations:[['required'],['length=',11]]},
               {input:{type:'text',justNumber:true},label:'کد ملی',field:'value.nationalCode',validations:[['required']]},
-              {input:{type:'text'},label:'استان',field:'value.province',validations:[['required']]},
+              {input:{type:'select',options:provinces},label:'استان',field:'value.province',validations:[['required']]},
               {input:{type:'textarea'},label:'آدرس ( اختیاری )',field:'value.address'},
               {
                 input:{
@@ -492,8 +499,11 @@ function Register(props){
       )
     }
   }
-  function submit(){
-    setInterCode(true)
+  function submit(api,parameter,onSuccess){
+    apis.request({
+      api,parameter,
+      onSuccess
+    })
   }
   function onClose(){
     if(interCode){setInterCode(false)}
@@ -524,30 +534,40 @@ function Register(props){
       ]
     }
   }
-  function codeSubmit_layout(){
+  function codeSubmit_layout(code,model){
     return {
       flex:1,className:'code-submit',
       column:[
         {flex:1},
         {
           html:(
-            <button className='button-2'>ثبت نام</button>
+            <button className='button-2' onClick={()=>submit('submitCode',{code,model},()=>setSuccess(true))}>ثبت نام</button>
           )
         }
       ]
     }
   }
   let [model,setModel] = useState({
-    fisrtname:'',
+    firstname:'',
     lastname:'',
     mobile:'',
     nationalCode:'',
     province:'',
     address:'',
     day:''
-
   });
-  
+  if(success){
+    return (
+      <RVD
+      layout={{
+        className: 'fs-24 container',style:{background:'#fff'},
+        column: [
+          {flex:1,align:'vh',html:'ثبت نام با موفقیت انجام شد',className:'fs-20'}
+        ]
+      }}
+    />
+    ) 
+  }
   return (
     <RVD
       layout={{
@@ -569,7 +589,7 @@ function Register(props){
             column: [
               codeLabel_layout(),
               code_layout(),
-              codeSubmit_layout()
+              codeSubmit_layout(code,model)
             ]
           },
         ]
