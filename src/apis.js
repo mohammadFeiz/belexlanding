@@ -2,7 +2,7 @@ export default function getApiFunctions({Axios,baseUrl}){
     return {
         async submitPhoneNumber({firstname,lastname,mobile,nationalCode,province,address,day}){
             debugger
-            let url = 'https://retailerapp.bbeta.ir//api/v1/booking/FirstStepBookingRegistration';
+            let url = 'https://retailerapp.bbeta.ir/api/v1/booking/FirstStepBookingRegistration';
              let body = {
                 "owner": {
                   "firstName": firstname,
@@ -34,7 +34,7 @@ export default function getApiFunctions({Axios,baseUrl}){
         async submitCode({code,model}){
             let {firstname,lastname,mobile,nationalCode,province,address,day} = model;
             debugger
-            let url = 'https://retailerapp.bbeta.ir//api/v1/booking/SecondStepBookingRegisteration';
+            let url = 'https://retailerapp.bbeta.ir/api/v1/booking/SecondStepBookingRegisteration';
             let body = {
                 
                 "owner": {
@@ -68,7 +68,7 @@ export default function getApiFunctions({Axios,baseUrl}){
         },
         async getProvinces(){
             debugger
-            //let url = 'https://retailerapp.bbeta.ir//api/v1/booking/GetAllBookingProvinces';
+            //let url = 'https://retailerapp.bbeta.ir/api/v1/booking/GetAllBookingProvinces';
             //let body = {};
 
             // const result2 = [];
