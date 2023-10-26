@@ -2,7 +2,7 @@ export default function getApiFunctions({Axios,baseUrl}){
     return {
         async submitPhoneNumber({firstname,lastname,mobile,nationalCode,province,address,day}){
             debugger
-            let url = 'https://localhost:44339/api/v1/booking/FirstStepBookingRegistration';
+            let url = 'https://retailerapp.bbeta.ir//api/v1/booking/FirstStepBookingRegistration';
              let body = {
                 "owner": {
                   "firstName": firstname,
@@ -15,8 +15,8 @@ export default function getApiFunctions({Axios,baseUrl}){
                       "title": "",
                       "cityId": 0,
                       "cityName": "",
-                      "provinceName": "",
-                      "provinceCode": "",
+                      "provinceName": province,
+                      "provinceCode": "", // provinceCode ?
                       "addressLine": "",
                       "postalCode": ""
                     }
@@ -34,7 +34,7 @@ export default function getApiFunctions({Axios,baseUrl}){
         async submitCode({code,model}){
             let {firstname,lastname,mobile,nationalCode,province,address,day} = model;
             debugger
-            let url = 'https://localhost:44339/api/v1/booking/SecondStepBookingRegisteration';
+            let url = 'https://retailerapp.bbeta.ir//api/v1/booking/SecondStepBookingRegisteration';
             let body = {
                 
                 "owner": {
@@ -48,8 +48,8 @@ export default function getApiFunctions({Axios,baseUrl}){
                         "title": "",
                         "cityId": 0,
                         "cityName": "",
-                        "provinceName": "",
-                        "provinceCode": "",
+                        "provinceName": province,
+                        "provinceCode": "", // provinceCode ?
                         "addressLine": "",
                         "postalCode": ""
                       }
@@ -68,9 +68,21 @@ export default function getApiFunctions({Axios,baseUrl}){
         },
         async getProvinces(){
             debugger
-            //let url = '';
+            //let url = 'https://retailerapp.bbeta.ir//api/v1/booking/GetAllBookingProvinces';
             //let body = {};
-            //let response = Axios.post(url,body);
+
+            // const result2 = [];
+            // obj = {}
+
+            // for(var i = 0; i < response.data.data.length; i++) {
+            // var obj = {};
+
+            // obj['text'] = response[i].data.data.name;
+            // obj['value'] = response[i].data.data.id;
+            // result2.push(obj);
+            // }
+            // return {result2}
+            //let response = await Axios.get(url);
             let result = [
                 {text:'تهران',value:'tehran'},
                 {text:'اصفهان',value:'isfahan'},
