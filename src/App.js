@@ -513,7 +513,7 @@ function Register(props){
   function codeLabel_layout(){
     return {
       flex:1,className:'code-description',
-      align:'vh',html:'کد تائید 5 رقمی به شماره موبایل شما ارسال شد'
+      align:'vh',html:'کد تائید 4 رقمی به شماره موبایل شما ارسال شد'
     }
   }
   function code_layout(){
