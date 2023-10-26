@@ -27,13 +27,12 @@ export default function getApiFunctions({Axios,baseUrl}){
                 "timeId": 10+day,
                 "sectionId": 0
               };
-             let response = await Axios.post(url,body);
+            let response = await Axios.post(url,body);
             let result = true;
-            return {result}
+            return {response,result}
         },
         async submitCode({code,model}){
             let {firstname,lastname,mobile,nationalCode,province,address,day} = model;
-            debugger
             let url = 'https://retailerapp.bbeta.ir/api/v1/booking/SecondStepBookingRegisteration';
             let body = {
                 
@@ -64,30 +63,18 @@ export default function getApiFunctions({Axios,baseUrl}){
             };
             let response = await Axios.post(url,body);
             let result = true;
-            return {result}
+            return {response,result}
         },
         async getProvinces(){
-            debugger
-            //let url = 'https://retailerapp.bbeta.ir/api/v1/booking/GetAllBookingProvinces';
-            //let body = {};
-
-            // const result2 = [];
-            // obj = {}
-
-            // for(var i = 0; i < response.data.data.length; i++) {
-            // var obj = {};
-
-            // obj['text'] = response[i].data.data.name;
-            // obj['value'] = response[i].data.data.id;
-            // result2.push(obj);
-            // }
-            // return {result2}
-            //let response = await Axios.get(url);
-            let result = [
-                {text:'تهران',value:'tehran'},
-                {text:'اصفهان',value:'isfahan'},
-            ];
+            let url = 'https://retailerapp.bbeta.ir/api/v1/booking/GetAllBookingProvinces';
+            let response = await Axios.get(url);
+            let result = response.data.data.map(({name,phoneCode})=>{
+              return {text:name,value:phoneCode}
+            });
             return {result}
+        },
+        async capacity(){
+
         }
     }
 }
