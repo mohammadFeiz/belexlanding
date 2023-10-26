@@ -339,6 +339,7 @@ function App() {
   if(register){
     return <Register onClose={()=>setRegister(false)}/>
   }
+  console.log('render')
   return (
     <RVD
       layout={{
