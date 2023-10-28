@@ -190,6 +190,7 @@ export default class AIOInput extends Component {
         else if (onClick) { onClick(); }
     }
     optionClick(option) {
+        if(option.disabled){return}
         let { onChange = () => { }, type } = this.props;
         let Value = this.getProp('value');
         let { value, onClick, close, text } = option;
@@ -784,6 +785,8 @@ class Form extends Component {
         return { html: label, attrs, style, className: 'aio-input-form-label' + (className ? ' ' + className : '') }
     }
     error_layout(error, attrs) {
+        let {showErrors} = this.props;
+        if(showErrors === false){return false}
         if (!error) { return false }
         let { className, style } = attrs;
         return { html: error, attrs, style, className: 'aio-input-form-error' + (className ? ' ' + className : '') }
@@ -1435,7 +1438,7 @@ class Layout extends Component {
         let cls;
         let className;
         if (option !== undefined) {
-            cls = `aio-input-option aio-input-${type}-option`
+            cls = `aio-input-option aio-input-${type}-option${option.disabled?' disabled':''}`
             if (getProp('multiple')) { cls += ` aio-input-${type}-multiple-option` }
             className = getOptionProp(option, 'className')
         }

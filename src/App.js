@@ -13,6 +13,7 @@ import img11 from './images/ic.png';
 import bg2 from './images/bg2.png';
 import frame1 from './images/frame1.png';
 import registersrc from './images/register.png';
+import successsrc from './images/success.png';
 import svgs from './svgs';
 import './App.css';
 import Icon from '@mdi/react';
@@ -77,17 +78,18 @@ function App() {
                 { size: 12 },
                 {
                   gap: 8, className: 'fs-20', align: 'v',
-                  row: [{ html: 'چرا در' }, { html: 'بلکس', className: 'bold fs-24' }, { html: 'شرکت کنم?' }]
+                  row: [{ html: 'چرا در' }, { html: 'بلکس', className: 'bold fs-24' }, { html: 'شرکت کنم؟' }]
                 }
               ]
             },
             { size: 36 },
             { gap: 36, column: new Array(6).fill(0).map((o, i) => dashBox_layout(i)) },
             { size: 72 },
-            {
-              html:<img src={frame1} width='100%'/>
-            }
+            
           ]
+        },
+        {
+          html:<img src={frame1} width='100%'/>
         }
       ]
     }
@@ -318,8 +320,8 @@ function App() {
           align:'vh',
           html: (
             
-            <div class="h_iframe-aparat_embed_frame" style={{width:'100%'}}>
-            <iframe className='w-100' src="https://www.aparat.com/video/video/embed/videohash/QMCfy/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe></div>
+            <div className="h_iframe-aparat_embed_frame" style={{width:'100%'}}>
+            <iframe className='w-100' src="https://www.aparat.com/video/video/embed/videohash/QMCfy/vt/frame"  allowFullScreen={true} webkitallowfullscreen="true" mozallowfullscreen="true"></iframe></div>
           )
 
         }
@@ -368,10 +370,12 @@ export default App;
 
 
 function TimeBoxes() {
-  let [delta, setDelta] = useState(AIODate().getDelta({ date: '1402/8/22' }))
-  setInterval(() => {
-    setDelta(AIODate().getDelta({ date: '1402/8/22' }))
-  }, 1000)
+  let [delta, setDelta] = useState(AIODate().getDelta({ date: '1402/8/23' }))
+  useEffect(()=>{
+    setInterval(() => {
+      setDelta(AIODate().getDelta({ date: '1402/8/23' }))
+    }, 1000)
+  },[])
   function timeBox_layout(n, unit) {
     return {
       column: [
@@ -379,19 +383,20 @@ function TimeBoxes() {
           style: { border: '1px solid #fff' },
           className: 'br-8 w-60 h-60 p-3',
           html: (
-            <div className='w-100 h-100 br-6 align-vh fs-24 bold' style={{ background: '#00A9F7', color: '#fff' }}>{n}</div>
+            <div className='w-100 h-100 br-6 align-vh fs-24 bold' style={{ background: '#ffffffbb', color: '#00A9F7' }}>{n}</div>
           )
         },
         { size: 6 },
-        { html: unit, className: 'fs-14 bold', align: 'vh', style:{ color: '#00A9F7'} }
+        { html: unit, className: 'fs-14 bold', align: 'vh', style:{ color: '#fff'} }
       ]
     }
   }
+  console.log('times');
   return (
     <RVD
       layout={{
         column: [
-          { html: 'تا شروع', align: 'vh', className: 'fs-18 bold', style: { color: '#00A9F7' } },
+          { html: 'تا شروع', align: 'vh', className: 'fs-18 bold', style: { color: '#fff' } },
           { size: 12 },
           {
             row: [
@@ -420,10 +425,21 @@ function Register(props){
   let [code,setCode] = useState('');
   let [success,setSuccess] = useState(false);
   let [provinces,setProvinces] = useState([])
+  let [cities,setCities] = useState([])
   let [apis] = useState(new AIOService({
     id:'belex',
     getApiFunctions,
-
+    getError:(response)=>{
+      try{
+        if(!response.data.isSuccess){
+          return response.data.message
+        }
+      }
+      catch{return}
+    },
+    onCatch:(error)=>{
+      return {result:error.response.data.message}
+    }
   }))
   useEffect(()=>{
     apis.request({
@@ -449,7 +465,8 @@ function Register(props){
     return {
       html:(
         <img src={registersrc} width='100%' />
-      )
+      ),
+      onClick:()=>onClose()
     }
   }
   function label_layout(){
@@ -467,11 +484,12 @@ function Register(props){
       html:(
         <AIOInput
           type='form' lang='fa'
+          showErrors={false}
           value={{...model}}
           onChange={(newModel)=>{
             setModel(newModel)
           }}
-          onSubmit={()=>submit('submitPhoneNumber',model,()=>setInterCode(true))}
+          onSubmit={()=>submit('submitPhoneNumber',{model,provinces,cities},()=>setInterCode(true))}
           submitText='دریافت کد تایید'
           inputs={{
             column:[
@@ -479,7 +497,24 @@ function Register(props){
               {input:{type:'text'},label:'نام خانوادگی',field:'value.lastname',validations:[['required']]},
               {input:{type:'text',justNumber:true},label:'شماره همراه',field:'value.mobile',validations:[['required'],['length=',11]]},
               {input:{type:'text',justNumber:true},label:'کد ملی',field:'value.nationalCode',validations:[['required']]},
-              {input:{type:'select',options:provinces},label:'استان',field:'value.province',validations:[['required']]},
+              {
+                input:{
+                  type:'select',options:provinces,popover:{position:'center'},
+                  onChange:async (province)=>{
+                    apis.request({
+                      parameter:{provinceCode:province,provinces},
+                      api:'getCities',
+                      onSuccess:(cities)=>{
+                        setCities(cities);
+                        setModel({...model,province,city:undefined})
+                      }
+                    })
+                    
+                  }
+                },
+                label:'استان',field:'value.province',validations:[['required']]
+              },
+              {input:{type:'select',options:cities,popover:{position:'center'}},label:'شهر',field:'value.city'},
               {input:{type:'textarea'},label:'آدرس ( اختیاری )',field:'value.address'},
               {
                 input:{
@@ -487,9 +522,10 @@ function Register(props){
                   options:[
                     {text:'سه شنبه 23 آبان ',value:'23'},
                     {text:'چهار شنبه 24 آبان ',value:'24'},
-                    {text:'پنج شنبه 25 آبان ',value:'25'},
+                    {text:'پنج شنبه 25 آبان (ظرفیت تکمیل)',value:'25'},
                     {text:'جمعه 26 آبان ',value:'26'},
-                  ]
+                  ],
+                  optionDisabled:'option.value === "25"'
                 },
                 label:'زمان شرکت در همایش',field:'value.day',
                 validations:[['required']]
@@ -542,7 +578,7 @@ function Register(props){
         {flex:1},
         {
           html:(
-            <button className='button-2' onClick={()=>submit('submitCode',{code,model},()=>setSuccess(true))}>ثبت نام</button>
+            <button className='button-2' onClick={()=>submit('submitCode',{code,model,provinces,cities},()=>setSuccess(true))}>ثبت نام</button>
           )
         }
       ]
@@ -554,6 +590,7 @@ function Register(props){
     mobile:'',
     nationalCode:'',
     province:'',
+    city:'',
     address:'',
     day:''
   });
@@ -561,9 +598,21 @@ function Register(props){
     return (
       <RVD
       layout={{
-        className: 'fs-24 container',style:{background:'#fff'},
+        className: 'fs-24 container',style:{background:'#f5f5f5'},
         column: [
-          {flex:1,align:'vh',html:'ثبت نام با موفقیت انجام شد',className:'fs-20'}
+          {flex:1},
+          {
+            size:240,html:(<img src={successsrc} width='200'/>),align:'vh'
+          },
+          {
+            align:'vh',html:`مشترى گرامي بروكس ، ثبت نام اوليه شما براى شركت در گردهمايى بروكس در تاريخ ${model.day} آبان انجام شد .`,className:'fs-24 bold p-36'
+          },
+          {
+            align:'vh',html:'همكاران ما به زودى با شما تماس خواهند گرفت.',className:'fs-16'
+          },
+          {flex:3,align:'vh',html:<img src={footersrc} width='240'/>},
+          {align:'vh',html:<button onClick={()=>onClose()} className='button-2'>بازگشت</button>,className:'p-12'}
+
         ]
       }}
     />
