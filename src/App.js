@@ -21,6 +21,7 @@ import { mdiClose } from '@mdi/js';
 
 function App() {
   let [register,setRegister] = useState(false);
+  let registerMode = false;
   let [map] = useState(new AIOMap({
     apiKeys: {
       map: 'web.68bf1e9b8be541f5b14686078d1e48d2',
@@ -195,6 +196,22 @@ function App() {
     }
   }
   function buttons_layout() {
+    if(!registerMode){
+      return {
+        className: 'buttons p-12',
+        style: { boxShadow: '0 0 6px 1px rgba(0,0,0,0.3)' },
+        column: [
+          {
+            size:84,
+            className:'fs-18',align:'vh',style:{background:'#f5f5f5'},
+            row:[
+              {html:'تلفن تماس :'},
+              {html:<a href='tel:02175059555'>02175059555</a>,className:'bold'}
+            ]
+          }
+        ]
+      }
+    }
     return {
       className: 'buttons p-12',
       style: { boxShadow: '0 0 6px 1px rgba(0,0,0,0.3)' },
@@ -337,7 +354,21 @@ function App() {
       )
     }
   }
-  function footer_layout() { return { html: (<img src={footersrc} width='100%' alt="" />) } }
+  function footer_layout() { 
+    return { 
+      column:[
+        {html: (<img src={footersrc} width='100%' alt="" />) } ,
+        {
+          size:84,
+          className:'fs-18',align:'vh',style:{background:'#f5f5f5'},
+          row:[
+            {html:'تلفن تماس :'},
+            {html:<a href='tel:02175059555'>02175059555</a>,className:'bold'}
+          ]
+        }
+      ]
+    }
+  }
   if(register){
     return <Register onClose={()=>setRegister(false)}/>
   }
@@ -425,6 +456,7 @@ function Register(props){
   let [code,setCode] = useState('');
   let [success,setSuccess] = useState(false);
   let [provinces,setProvinces] = useState([])
+  let [registerCode,setRegisterCode] = useState('');
   let [cities,setCities] = useState([])
   let [apis] = useState(new AIOService({
     id:'belex',
@@ -438,7 +470,12 @@ function Register(props){
       catch{return}
     },
     onCatch:(error)=>{
-      return {result:error.response.data.message}
+      try{
+        let {Message,message} = error.response.data;
+        return message || Message
+      }
+      catch{return 'خطای سرور'}
+      
     }
   }))
   useEffect(()=>{
@@ -495,8 +532,8 @@ function Register(props){
             column:[
               {input:{type:'text'},label:'نام',field:'value.firstname',validations:[['required']]},
               {input:{type:'text'},label:'نام خانوادگی',field:'value.lastname',validations:[['required']]},
-              {input:{type:'text',justNumber:true},label:'شماره همراه',field:'value.mobile',validations:[['required'],['length=',11]]},
-              {input:{type:'text',justNumber:true},label:'کد ملی',field:'value.nationalCode',validations:[['required']]},
+              {input:{type:'text',justNumber:true,maxLength:11},label:'شماره همراه',field:'value.mobile',validations:[['required'],['length=',11]]},
+              {input:{type:'text',justNumber:true,maxLength:10},label:'کد ملی',field:'value.nationalCode',validations:[['required']]},
               {
                 input:{
                   type:'select',options:provinces,popover:{position:'center'},
@@ -514,7 +551,7 @@ function Register(props){
                 },
                 label:'استان',field:'value.province',validations:[['required']]
               },
-              {input:{type:'select',options:cities,popover:{position:'center'}},label:'شهر',field:'value.city'},
+              {input:{type:'select',options:cities,popover:{position:'center'}},label:'شهر',field:'value.city',validations:[['required']]},
               {input:{type:'textarea'},label:'آدرس ( اختیاری )',field:'value.address'},
               {
                 input:{
@@ -578,7 +615,16 @@ function Register(props){
         {flex:1},
         {
           html:(
-            <button className='button-2' onClick={()=>submit('submitCode',{code,model,provinces,cities},()=>setSuccess(true))}>ثبت نام</button>
+            <button className='button-2' onClick={()=>{
+              submit(
+                'submitCode',
+                {code,model,provinces,cities},
+                (registerCode)=>{
+                  setRegisterCode(registerCode)
+                  setSuccess(true)
+                }
+              )
+            }}>ثبت نام</button>
           )
         }
       ]
@@ -602,15 +648,15 @@ function Register(props){
         column: [
           {flex:1},
           {
-            size:240,html:(<img src={successsrc} width='200'/>),align:'vh'
+            size:160,html:(<img src={successsrc} width='160'/>),align:'vh'
           },
           {
-            align:'vh',html:`مشترى گرامي بروكس ، ثبت نام اوليه شما براى شركت در گردهمايى بروكس در تاريخ ${model.day} آبان انجام شد .`,className:'fs-24 bold p-36'
+            align:'vh',html:`مشترى گرامي بروكس ، ثبت نام اوليه شما براى شركت در گردهمايى بروكس در تاريخ ${model.day} آبان با کد رهگیری ${registerCode} انجام شد .`,className:'fs-20 bold p-24'
           },
           {
             align:'vh',html:'همكاران ما به زودى با شما تماس خواهند گرفت.',className:'fs-16'
           },
-          {flex:3,align:'vh',html:<img src={footersrc} width='240'/>},
+          {flex:2,align:'vh',html:<img src={footersrc} width='240'/>},
           {align:'vh',html:<button onClick={()=>onClose()} className='button-2'>بازگشت</button>,className:'p-12'}
 
         ]
